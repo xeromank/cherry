@@ -1,0 +1,22 @@
+name: 기능 제안
+description: Cherry에 추가하고 싶은 기능이나 개선 사항을 알려 주세요.
+body:
+  - type: textarea
+    id: use-case
+    attributes:
+      label: 사용 상황
+      description: Cherry를 쓰면서 어떤 작업을 하려 했고, 어디에서 불편했나요?
+    validations:
+      required: true
+  - type: textarea
+    id: desired-behavior
+    attributes:
+      label: 원하는 동작
+      description: 어떤 동작이 추가되면 그 상황에서 도움이 될까요?
+    validations:
+      required: true
+  - type: textarea
+    id: extra-context
+    attributes:
+      label: 추가 정보
+      description: Apple Silicon 또는 Intel, macOS 버전, 관련 스크린샷 등 설명에 도움이 되는 내용이 있다면 적어 주세요.
