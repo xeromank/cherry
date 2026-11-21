@@ -12,13 +12,7 @@ identity=-
 signature_options=(--timestamp=none)
 if [[ $# -eq 1 ]]; then
     identity="$signing_identity"
-    if [[ -z "$identity" ]] || ! security find-identity -v -p codesigning | awk -v selected="$identity" '
-        /"Developer ID Application:/ && (toupper($2) == toupper(selected) || index($0, "\"" selected "\"") > 0) { found = 1 }
-        END { exit !found }
-    '; then
-        echo 'Set CHERRY_SIGNING_IDENTITY to the name or SHA-1 of an available Developer ID Application identity.' >&2
-        exit 1
-    fi
+    require_signing_identity 'Developer ID Application' "$identity" CHERRY_SIGNING_IDENTITY
     signature_options=(--options runtime --timestamp)
 fi
 
@@ -33,11 +27,8 @@ trap 'rm -rf "$staging_dir"' EXIT
 payload="$staging_dir/payload"
 staged_dmg="$staging_dir/$dmg_name"
 
-arm_binary="$(build_release_binary "arm64-apple-macosx$minimum_os" "$project_dir/.build/dmg-arm64")"
-intel_binary="$(build_release_binary "x86_64-apple-macosx$minimum_os" "$project_dir/.build/dmg-x86_64")"
 universal_binary="$staging_dir/$product"
-xcrun lipo -create "$arm_binary" "$intel_binary" -output "$universal_binary"
-xcrun lipo "$universal_binary" -verify_arch arm64 x86_64
+build_universal_binary "$universal_binary" "$minimum_os"
 
 stage_app_bundle "$universal_binary" "$payload/$app_name.app" "$identity" "${signature_options[@]}"
 ln -s /Applications "$payload/Applications"

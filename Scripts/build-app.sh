@@ -21,6 +21,25 @@ build_release_binary() {
     printf '%s/%s\n' "$binary_dir" "$product"
 }
 
+build_universal_binary() {
+    local destination="$1" minimum_os="$2" arm_binary intel_binary
+    arm_binary="$(build_release_binary "arm64-apple-macosx$minimum_os" "$project_dir/.build/dist-arm64")" || return
+    intel_binary="$(build_release_binary "x86_64-apple-macosx$minimum_os" "$project_dir/.build/dist-x86_64")" || return
+    xcrun lipo -create "$arm_binary" "$intel_binary" -output "$destination"
+    xcrun lipo "$destination" -verify_arch arm64 x86_64
+}
+
+require_signing_identity() {
+    local kind="$1" identity="$2" variable="$3"
+    if [[ -z "$identity" ]] || ! security find-identity -v | awk -v kind="$kind" -v selected="$identity" '
+        index($0, "\"" kind ":") && (toupper($2) == toupper(selected) || index($0, "\"" selected "\"") > 0) { found = 1 }
+        END { exit !found }
+    '; then
+        printf 'Set %s to the name or SHA-1 of an available %s identity.\n' "$variable" "$kind" >&2
+        return 1
+    fi
+}
+
 stage_app_bundle() {
     local binary="$1" app="$2" identity="$3"
     shift 3
@@ -35,7 +54,7 @@ stage_app_bundle() {
     codesign --verify --strict --all-architectures "$app"
 }
 
-# build-dmg.sh uses the build and bundle helpers with its own staging directory.
+# The installer scripts use these helpers with their own staging directories.
 if [[ ${BASH_SOURCE[0]} != "$0" ]]; then
     return
 fi

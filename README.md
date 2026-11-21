@@ -8,13 +8,23 @@ Cherry는 Mac 메뉴 막대에서 자주 쓰는 아이콘만 골라 두고, 나�
 
 ## 설치
 
-**macOS 14 이상**에서 사용할 수 있습니다. DMG는 Apple Silicon과 Intel Mac을 모두 지원합니다.
+**macOS 14 이상**에서 사용할 수 있습니다. PKG와 DMG 모두 Apple Silicon과 Intel Mac을 지원합니다. [GitHub Releases](https://github.com/xeromank/cherry/releases)에서 원하는 형식의 Universal 설치 파일을 내려받습니다.
 
-1. [GitHub Releases](https://github.com/xeromank/cherry/releases)에서 Cherry의 Universal DMG를 내려받습니다.
-2. DMG 안의 **Cherry**를 열고 **응용 프로그램으로 이동**을 누릅니다. Finder에서 설치하려면 Cherry 아이콘을 같은 창의 **Applications(응용 프로그램)** 폴더에 끌어다 놓은 뒤 응용 프로그램 폴더에서 엽니다. 이미 설치된 Cherry를 교체할 때도 Finder에서 끌어다 놓습니다.
-3. 첫 실행 화면에서 **권한 요청**을 누릅니다. **시스템 설정 → 개인정보 보호 및 보안 → 손쉬운 사용**에서 **Cherry**를 허용합니다.
+### PKG로 설치하기
 
-공개 프리뷰 DMG는 Apple 공증 전이라 Mac 설정에 따라 첫 실행이 차단될 수 있습니다. [소스에서 빌드](#소스에서-빌드)하는 방법도 아래에 있습니다.
+1. `.pkg` 파일을 열고 macOS 설치 프로그램에서 **계속 → 설치**를 누릅니다. 관리자 인증이 필요하면 설치 프로그램에서 진행합니다.
+2. 설치가 끝나면 **응용 프로그램** 폴더의 **Cherry**를 엽니다.
+
+### DMG로 설치하기
+
+1. DMG 안의 **Cherry**를 열고 **응용 프로그램으로 이동**을 누릅니다.
+2. Finder에서 직접 설치하거나 기존 앱을 교체하려면 Cherry 아이콘을 같은 창의 **Applications(응용 프로그램)** 폴더로 끌어다 놓습니다. 복사가 끝나면 응용 프로그램 폴더에서 Cherry를 엽니다.
+
+### 첫 실행
+
+첫 실행 화면에서 **권한 요청**을 누릅니다. **시스템 설정 → 개인정보 보호 및 보안 → 손쉬운 사용**에서 **Cherry**를 허용합니다.
+
+공개 프리뷰는 Apple 공증 전입니다. Mac의 보안 설정에 따라 미서명 PKG 설치나 앱의 첫 실행이 차단될 수 있습니다. [소스에서 빌드](#소스에서-빌드)
 
 Cherry는 메뉴 막대 항목을 찾고 원래 메뉴를 열거나 배치를 바꾸는 데 손쉬운 사용 권한을 씁니다. 화면 기록 권한은 필요하지 않습니다.
 
@@ -65,7 +75,15 @@ swift test
 open dist/Cherry.app
 ```
 
-Universal DMG를 만들려면 `./Scripts/build-dmg.sh`를 실행합니다. 결과물은 `dist/`에 저장됩니다. Xcode 대신 Command Line Tools를 쓰려면 빌드 명령 앞에 `DEVELOPER_DIR=/Library/Developer/CommandLineTools`를 붙일 수 있습니다.
+Universal PKG는 `./Scripts/build-pkg.sh`로, Universal DMG는 `./Scripts/build-dmg.sh`로 만듭니다. 결과물은 `dist/`에 저장됩니다. Xcode 대신 Command Line Tools를 쓰려면 빌드 명령 앞에 `DEVELOPER_DIR=/Library/Developer/CommandLineTools`를 붙일 수 있습니다.
+
+배포용 PKG를 서명하려면 Developer ID Application과 Developer ID Installer 인증서를 각각 지정합니다.
+
+```sh
+CHERRY_SIGNING_IDENTITY='Developer ID Application: …' \
+  CHERRY_INSTALLER_SIGNING_IDENTITY='Developer ID Installer: …' \
+  ./Scripts/build-pkg.sh --developer-id
+```
 
 ## 기여하기
 
