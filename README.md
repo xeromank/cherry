@@ -10,8 +10,8 @@ Cherry는 Mac 메뉴 막대에서 자주 쓰는 아이콘만 골라 두고, 나�
 
 **macOS 14 이상**에서 사용할 수 있습니다. DMG는 Apple Silicon과 Intel Mac을 모두 지원합니다.
 
-1. [GitHub Releases](https://github.com/xeromank/cherry/releases)에서 `Cherry-0.2.0-macOS-universal.dmg`를 내려받습니다.
-2. DMG를 열어 `Cherry.app`을 **응용 프로그램** 폴더에 끌어다 놓고 실행합니다.
+1. [GitHub Releases](https://github.com/xeromank/cherry/releases)에서 Cherry의 Universal DMG를 내려받습니다.
+2. DMG 안의 **Cherry**를 열고 **응용 프로그램으로 이동**을 누릅니다. Finder에서 설치하려면 Cherry 아이콘을 같은 창의 **Applications(응용 프로그램)** 폴더에 끌어다 놓은 뒤 응용 프로그램 폴더에서 엽니다. 이미 설치된 Cherry를 교체할 때도 Finder에서 끌어다 놓습니다.
 3. 첫 실행 화면에서 **권한 요청**을 누릅니다. **시스템 설정 → 개인정보 보호 및 보안 → 손쉬운 사용**에서 **Cherry**를 허용합니다.
 
 공개 프리뷰 DMG는 Apple 공증 전이라 Mac 설정에 따라 첫 실행이 차단될 수 있습니다. [소스에서 빌드](#소스에서-빌드)하는 방법도 아래에 있습니다.
