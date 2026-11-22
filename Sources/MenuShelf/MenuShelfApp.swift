@@ -135,6 +135,12 @@ private final class MenuShelfController: NSObject, NSApplicationDelegate, NSWind
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let launchEvent = NSAppleEventManager.shared().currentAppleEvent
+        DiskImageInstallPrompt.offer { [weak self] in
+            self?.start(launchEvent: launchEvent)
+        }
+    }
+
+    private func start(launchEvent: NSAppleEventDescriptor?) {
         menuBar = MenuBarControls(
             open: { [weak self] anchor in self?.togglePanel(anchor: anchor) },
             settings: { [weak self] in self?.showPanel(surface: .settings) },
@@ -169,7 +175,7 @@ private final class MenuShelfController: NSObject, NSApplicationDelegate, NSWind
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-        showPanel()
+        if menuBar != nil { showPanel() }
         return false
     }
 

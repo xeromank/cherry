@@ -76,7 +76,15 @@ swift test
 open dist/Cherry.app
 ```
 
-Universal DMG를 만들려면 `./Scripts/build-dmg.sh`를 실행합니다. 결과물은 `dist/`에 저장됩니다. Xcode 대신 Command Line Tools를 쓰려면 빌드 명령 앞에 `DEVELOPER_DIR=/Library/Developer/CommandLineTools`를 붙일 수 있습니다.
+Universal PKG는 `./Scripts/build-pkg.sh`로, Universal DMG는 `./Scripts/build-dmg.sh`로 만듭니다. 결과물은 `dist/`에 저장됩니다. Xcode 대신 Command Line Tools를 쓰려면 빌드 명령 앞에 `DEVELOPER_DIR=/Library/Developer/CommandLineTools`를 붙일 수 있습니다.
+
+배포용 PKG를 서명하려면 Developer ID Application과 Developer ID Installer 인증서를 각각 지정합니다.
+
+```sh
+CHERRY_SIGNING_IDENTITY='Developer ID Application: …' \
+  CHERRY_INSTALLER_SIGNING_IDENTITY='Developer ID Installer: …' \
+  ./Scripts/build-pkg.sh --developer-id
+```
 
 ## 기여하기
 
