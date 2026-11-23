@@ -40,10 +40,12 @@ require_signing_identity() {
     fi
 }
 
-stage_app_bundle() {
+stage_app_bundle() (
     local binary="$1" app="$2" identity="$3"
     shift 3
 
+    # Installer makes the app root-owned. Keep its bundle and signature readable by other users.
+    umask 022
     mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
     install -m 644 "$project_dir/Resources/Info.plist" "$app/Contents/Info.plist"
     install -m 644 "$project_dir/Resources/Cherry.icns" "$app/Contents/Resources/Cherry.icns"
@@ -52,7 +54,7 @@ stage_app_bundle() {
     plutil -lint "$app/Contents/Info.plist"
     codesign --force --sign "$identity" "$@" "$app"
     codesign --verify --strict --all-architectures "$app"
-}
+)
 
 # The installer scripts use these helpers with their own staging directories.
 if [[ ${BASH_SOURCE[0]} != "$0" ]]; then
