@@ -76,11 +76,13 @@ jobs:
         run: |
           packages=(dist/*.pkg)
           test "${#packages[@]}" -eq 1
-          sudo installer -pkg "${packages[0]}" -target /
+          sudo -n installer -pkg "${packages[0]}" -target /
           pkgutil --pkg-info com.xeromank.menushelf.pkg
           app=/Applications/Cherry.app
           test "$(id -u)" -ne 0
           test "$(stat -f %u "$app")" -eq 0
+          test "$(stat -f %Lp "$app")" = 755
+          test "$(stat -f %Lp "$app/Contents/_CodeSignature/CodeResources")" = 644
           test -r "$app/Contents/Info.plist"
           test -x "$app/Contents/MacOS/MenuShelf"
           codesign --verify --strict --all-architectures "$app"
